@@ -15,7 +15,12 @@ const Login = ({authLogin}) => {
         setLoading(true)
         login(form).then(res => {
             if (res.message) {
-                console.log(res.message)
+                document.querySelector('.error').innerHTML = res.message
+                setTimeout(() => {
+                    if (document.querySelector('.error')) {
+                        document.querySelector('.error').innerHTML = ''
+                    }
+                }, 3000)
                 return authLogin(false)
             } else {
                 localStorage.setItem('token', res.token)
@@ -24,7 +29,14 @@ const Login = ({authLogin}) => {
                 }
                 return authLogin(true)
             }
-        }).catch((e) => console.log(e))
+        }).catch((e) => {
+            document.querySelector('.error').innerHTML = e
+            setTimeout(() => {
+                if (document.querySelector('.error')) {
+                    document.querySelector('.error').innerHTML = ''
+                }
+            }, 3000)
+        })
             .finally(() => setLoading(false))
     }
 
@@ -41,6 +53,7 @@ const Login = ({authLogin}) => {
                         <Input name='password' id='password' size='middle' type='password' onChange={formHandler}/>
                     </Form.Item>
                     <Link to={'/register'}>register</Link>
+                    <div className="error"/>
                     <Button onClick={submitHandler} disabled={loading}>
                         Login
                     </Button>
